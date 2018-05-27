@@ -1,9 +1,10 @@
 package sergeygubar.github.io.currencyconverter.main
 
 import android.view.MenuItem
+import org.jetbrains.anko.AnkoLogger
 import sergeygubar.github.io.currencyconverter.R
 
-class MainActivityPresenter(private val view: MainActivityView) {
+class MainActivityPresenter(private val view: MainActivityView) : AnkoLogger {
 
     fun onBottomNavItemSelected(menuItem: MenuItem) {
         when (menuItem.itemId) {

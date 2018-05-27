@@ -5,9 +5,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.jetbrains.anko.AnkoLogger
 import sergeygubar.github.io.currencyconverter.R
 
-class ConvertFragment: Fragment() {
+class ConvertFragment : Fragment(), AnkoLogger {
 
     companion object {
         fun newInstance(): Fragment {

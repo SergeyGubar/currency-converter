@@ -2,6 +2,7 @@ ext {
 
     supportLibrary = '27.1.1'
     constraintLayoutVersion = '1.1.0'
+    ankoVersion = '0.10.5'
 
     rxJavaAdapter = '2.4.0'
     rxAndroidVersion = '2.0.2'
@@ -42,6 +43,10 @@ ext {
     androidTestDependencies = [
             espresso: "com.android.support.test.espresso:espresso-core:${espressoVersion}",
             testRunner: "com.android.support.test:runner:${testRunnerVersion}"
+    ]
+
+    ankoDependencies = [
+            anko: "org.jetbrains.anko:anko:${ankoVersion}"
     ]
 
 

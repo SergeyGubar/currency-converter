@@ -29,6 +29,7 @@ dependencies {
     implementation networkingDependencies.values()
     implementation supportDependencies.values()
     implementation testDependencies.values()
+    implementation ankoDependencies.values()
 
     androidTestImplementation androidTestDependencies.values()
 
