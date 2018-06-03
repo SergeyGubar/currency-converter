@@ -3,6 +3,8 @@ ext {
     supportLibrary = '27.1.1'
     constraintLayoutVersion = '1.1.0'
     ankoVersion = '0.10.5'
+    roomVersion = '1.1.0'
+
 
     rxJavaAdapter = '2.4.0'
     rxAndroidVersion = '2.0.2'
@@ -33,6 +35,11 @@ ext {
 
     testDependencies = [
             junit   : "junit:junit:${junitVersion}"
+    ]
+
+    roomDependencies = [
+            room : "android.arch.persistence.room:runtime:$roomVersion",
+            annotationProcessor : "androidx.room:room-compiler:$roomVersion"
     ]
 
     networkingDependencies = [

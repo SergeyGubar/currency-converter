@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.fragment_convert.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import sergeygubar.github.io.currencyconverter.R
+import sergeygubar.github.io.currencyconverter.db.AssetsDataBase
 import sergeygubar.github.io.currencyconverter.entities.Asset
 
 class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
@@ -44,7 +45,10 @@ class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
 
     override fun displayAssets(assets: List<Asset>) {
         info("displayAssets assets = [$assets]")
+        AssetsDataBase.getInstance(context)!!.assetsDao().insertAll(assets)
+
         assetsIds.addAll(assets.map { it.assetId })
+
         currency_to_spinner.setItems(assetsIds)
         currency_from_spinner.setItems(assetsIds)
     }
