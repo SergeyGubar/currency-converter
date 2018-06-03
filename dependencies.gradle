@@ -14,7 +14,8 @@ ext {
 
     junitVersion = '4.12'
     testRunnerVersion = '1.0.2'
-    //Support Libraries dependencies
+
+    spinnerVersion = '1.2.5'
 
     supportDependencies = [
             design           : "com.android.support:design:${supportLibrary}",
@@ -47,6 +48,10 @@ ext {
 
     ankoDependencies = [
             anko: "org.jetbrains.anko:anko:${ankoVersion}"
+    ]
+
+    viewsDependencies = [
+            spinner: "com.jaredrummler:material-spinner:${spinnerVersion}"
     ]
 
 

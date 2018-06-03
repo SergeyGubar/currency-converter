@@ -30,7 +30,7 @@ dependencies {
     implementation supportDependencies.values()
     implementation testDependencies.values()
     implementation ankoDependencies.values()
-
+    implementation viewsDependencies.values()
     androidTestImplementation androidTestDependencies.values()
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
