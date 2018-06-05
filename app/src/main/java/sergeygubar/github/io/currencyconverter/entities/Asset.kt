@@ -7,13 +7,14 @@ import sergeygubar.github.io.currencyconverter.constants.ASSETS_ID
 import sergeygubar.github.io.currencyconverter.constants.ASSETS_IS_CRYPTO
 import sergeygubar.github.io.currencyconverter.constants.ASSETS_NAME
 import sergeygubar.github.io.currencyconverter.constants.ASSETS_TABLE_NAME
+import java.util.*
 
 @Entity(tableName = ASSETS_TABLE_NAME)
-data class Asset(@PrimaryKey(autoGenerate = true) var id: Long?,
+data class Asset(@PrimaryKey var id: String = UUID.randomUUID().toString(),
                  @ColumnInfo(name = ASSETS_ID) var assetId: String,
                  @ColumnInfo(name = ASSETS_NAME) var name: String,
                  @ColumnInfo(name = ASSETS_IS_CRYPTO) var isTypeCrypto: Boolean) {
     // Room constructor
-    constructor() : this(0, "", "", false)
+    constructor() : this(UUID.randomUUID().toString(), "", "", false)
 
 }

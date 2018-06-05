@@ -37,11 +37,6 @@ ext {
             junit   : "junit:junit:${junitVersion}"
     ]
 
-    roomDependencies = [
-            room : "android.arch.persistence.room:runtime:$roomVersion",
-            annotationProcessor : "androidx.room:room-compiler:$roomVersion"
-    ]
-
     networkingDependencies = [
             rxJavaAdapter        : "com.squareup.retrofit2:adapter-rxjava2:${rxJavaAdapter}",
             retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",

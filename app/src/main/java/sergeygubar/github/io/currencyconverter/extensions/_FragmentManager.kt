@@ -11,5 +11,5 @@ fun FragmentManager.executeTransaction(block: FragmentTransaction.() -> Unit) {
 }
 
 fun FragmentManager.fragmentExists(id: Int): Boolean {
-    return findFragmentById(R.id.main_container) != null
+    return findFragmentById(id) != null
 }

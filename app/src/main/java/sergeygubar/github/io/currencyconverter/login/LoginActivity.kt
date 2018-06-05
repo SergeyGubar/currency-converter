@@ -1,78 +1,69 @@
 package sergeygubar.github.io.currencyconverter.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import sergeygubar.github.io.currencyconverter.R
+import sergeygubar.github.io.currencyconverter.R.id.*
+import sergeygubar.github.io.currencyconverter.constants.TOKEN_KEY
+import sergeygubar.github.io.currencyconverter.main.MainActivity
+import sergeygubar.github.io.currencyconverter.registration.RegistrationActivity
+
+private const val PASSWORD_PATTERN = "^[a-zA-Z0-9]+$"
+private const val EMAIL_PATTERN = "^[A-Z0-9.]+@[A-Z0-9.]+\\.[A-Z]{2,}\$"
 
 
-private const val SERVER_CLIENT_ID = "918564697902-7qscjgn9ldnioinclim0qtul4ad66p0p.apps.googleusercontent.com"
-
-class LoginActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
-
-
-    private lateinit var mGoogleApiClient: GoogleApiClient
-    private val OUR_REQUEST_CODE = 4000
-
+class LoginActivity : AppCompatActivity(), AnkoLogger {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(SERVER_CLIENT_ID)
-                .requestEmail()
-                .build()
+        val token = defaultSharedPreferences.getString(TOKEN_KEY, "")
 
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build()
-
-        val opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient)
-
-        if (opr.isDone) {
-            toast("User is logged in")
-        } else {
-            toast("User is not logged in")
+        if (token.isNotEmpty()) {
+            startMainActivity()
         }
 
         log_in_button.setOnClickListener {
-            val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
-            startActivityForResult(signInIntent, OUR_REQUEST_CODE)
+            login()
         }
 
-
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onActivityResult(requestCode: Int, responseCode: Int,
-                                  intent: Intent) {
-        super.onActivityResult(requestCode, responseCode, intent)
-
-        if (requestCode == OUR_REQUEST_CODE) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent)
-            handleSignInResult(result)
+        register_button.setOnClickListener {
+            startActivity(intentFor<RegistrationActivity>())
         }
     }
 
-    private fun handleSignInResult(result: GoogleSignInResult) {
-        if (result.isSuccess) {
-            val acct = result.signInAccount
-            // If you don't already have a server session, you can now send this code to your
-            // server to authenticate on the backend.
-            val authCode = acct!!.serverAuthCode
-            toast(authCode!!)
+    private fun login() {
+        val email = email_edit_text.text.toString()
+        val password = password_edit_text.text.toString()
 
+        if (true) {
+            OnlineLoginRepository.sendLoginRequest(email, password)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        defaultSharedPreferences.edit()
+                                .putString(TOKEN_KEY, it.token)
+                                .apply()
+                        startMainActivity()
+                    }, {
+                        toast("There is no such user!")
+                    })
+        } else {
+            toast("Incorrect email or password!")
         }
     }
+
+    private fun startMainActivity() {
+        startActivity(intentFor<MainActivity>())
+        finish()
+    }
+
+
 }

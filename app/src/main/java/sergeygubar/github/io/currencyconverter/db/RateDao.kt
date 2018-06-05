@@ -6,18 +6,20 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import io.reactivex.Observable
 import sergeygubar.github.io.currencyconverter.constants.ASSETS_TABLE_NAME
+import sergeygubar.github.io.currencyconverter.constants.RATE_TABLE_NAME
 import sergeygubar.github.io.currencyconverter.entities.Asset
+import sergeygubar.github.io.currencyconverter.entities.ExchangeRate
 
 @Dao
-interface AssetsDao {
+interface RateDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(asset: ExchangeRate)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(asset: Asset)
+    fun insertAll(assets: List<ExchangeRate>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(assets: List<Asset>)
+    @Query("SELECT * from $RATE_TABLE_NAME")
+    fun getAll(): List<ExchangeRate>
 
-    @Query("SELECT * from $ASSETS_TABLE_NAME")
-    fun getAll(): List<Asset>
-
-}
+    @Query("SELECT * from $RATE_TABLE_NAME WHERE to = :to AND from = :from")
+    fun getRate(from: String, to: String): ExchangeRate}

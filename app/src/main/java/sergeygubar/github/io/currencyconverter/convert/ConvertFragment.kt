@@ -23,7 +23,8 @@ class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_convert, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
+            : View? = inflater.inflate(R.layout.fragment_convert, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,13 +40,12 @@ class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = ConvertFragmentPresenter(this, OnlineAssetRepository())
+        presenter = ConvertFragmentPresenter(context!!, this, OfflineAssetRepository(context!!))
         presenter.loadAssets()
     }
 
     override fun displayAssets(assets: List<Asset>) {
         info("displayAssets assets = [$assets]")
-        AssetsDataBase.getInstance(context)!!.assetsDao().insertAll(assets)
 
         assetsIds.addAll(assets.map { it.assetId })
 

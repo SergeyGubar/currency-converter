@@ -6,8 +6,8 @@ import sergeygubar.github.io.currencyconverter.entities.ExchangePojo
 
 interface AssetRepository {
 
-    fun loadAssets(): Observable<List<Asset>>
+    fun loadAssets(token: String): Observable<List<Asset>>
 
-    fun loadExchangeRate(from: String, to: String): Observable<ExchangePojo>
+    fun loadExchangeRate(token: String, from: String, to: String): Observable<ExchangePojo>
 
 }
