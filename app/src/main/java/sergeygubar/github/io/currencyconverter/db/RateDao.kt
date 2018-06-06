@@ -21,5 +21,6 @@ interface RateDao {
     @Query("SELECT * from $RATE_TABLE_NAME")
     fun getAll(): List<ExchangeRate>
 
-    @Query("SELECT * from $RATE_TABLE_NAME WHERE to = :to AND from = :from")
-    fun getRate(from: String, to: String): ExchangeRate}
+    @Query("SELECT * from $RATE_TABLE_NAME WHERE assetBaseId = :from AND assetQuoteId = :to")
+    fun getRate(from: String, to: String): ExchangeRate?
+}

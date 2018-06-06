@@ -35,15 +35,16 @@ class ConvertFragmentPresenter(private val context: Context,
                 })
     }
 
-
-
     fun convertCurrency(from: String, fromValue: Int, to: String) {
         info("convertCurrency from = [$from] to = [$to]")
         assetRepository.loadExchangeRate("Bearer $token", from, to)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .filter { it.message.toLowerCase() == "success" }
                 .map { it.exchangeRate }
                 .subscribe({ exchangeRate ->
+                    exchangeRate.assetBaseId = from
+                    exchangeRate.assetQuoteId = to
                     saveRateToDb(exchangeRate)
                     info("convertCurrency = [${exchangeRate.rate}]")
                     val result = ConvertHelper.convert(fromValue, exchangeRate.rate)
@@ -54,13 +55,13 @@ class ConvertFragmentPresenter(private val context: Context,
                 })
     }
 
-    fun saveAssetsToDb(assets: List<Asset>) {
+    private fun saveAssetsToDb(assets: List<Asset>) {
         thread(start = true) {
             AssetsDataBase.getInstance(context)!!.assetsDao().insertAll(assets)
         }
     }
 
-    fun saveRateToDb(rate: ExchangeRate) {
+    private fun saveRateToDb(rate: ExchangeRate) {
         thread(start = true) {
             AssetsDataBase.getInstance(context)!!.rateDao().insert(rate)
         }

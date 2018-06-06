@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="sergeygubar.github.io.currencyconverter">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -23,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".registration.RegistrationActivity">
+        </activity>
+        <activity android:name=".favourites.add.AddFavouriteActivity">
         </activity>
     </application>
 

@@ -11,6 +11,8 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import sergeygubar.github.io.currencyconverter.R
 import sergeygubar.github.io.currencyconverter.R.id.*
+import sergeygubar.github.io.currencyconverter.constants.EMAIL_KEY
+import sergeygubar.github.io.currencyconverter.constants.PASSWORD_KEY
 import sergeygubar.github.io.currencyconverter.constants.TOKEN_KEY
 import sergeygubar.github.io.currencyconverter.main.MainActivity
 import sergeygubar.github.io.currencyconverter.registration.RegistrationActivity
@@ -50,6 +52,8 @@ class LoginActivity : AppCompatActivity(), AnkoLogger {
                     .subscribe({
                         defaultSharedPreferences.edit()
                                 .putString(TOKEN_KEY, it.token)
+                                .putString(EMAIL_KEY, email)
+                                .putString(PASSWORD_KEY, password)
                                 .apply()
                         startMainActivity()
                     }, {

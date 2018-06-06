@@ -5,15 +5,15 @@ import android.os.Bundle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_registration.*
-import org.jetbrains.anko.defaultSharedPreferences
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
 import sergeygubar.github.io.currencyconverter.R
+import sergeygubar.github.io.currencyconverter.constants.EMAIL_KEY
+import sergeygubar.github.io.currencyconverter.constants.PASSWORD_KEY
 import sergeygubar.github.io.currencyconverter.constants.TOKEN_KEY
 import sergeygubar.github.io.currencyconverter.login.OnlineLoginRepository
 import sergeygubar.github.io.currencyconverter.main.MainActivity
 
-class RegistrationActivity : AppCompatActivity() {
+class RegistrationActivity : AppCompatActivity(), AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,23 +25,30 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun registerUser(email: String, password: String) {
-        RegistrationManager.sendRegistrationRequest(email, password)
+        info("registerUser email = [$email] password = [$password]")
+        RegistrationManager
+                .sendRegistrationRequest(email, password)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
+                    info("${it.isSuccess}")
                     loginUser(email, password)
                 }, {
+                    info("${it.cause}")
                     throw(it)
                 })
     }
 
     private fun loginUser(email: String, password: String) {
-        OnlineLoginRepository.sendLoginRequest(email, password)
+        OnlineLoginRepository
+                .sendLoginRequest(email, password)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     defaultSharedPreferences.edit()
                             .putString(TOKEN_KEY, it.token)
+                            .putString(EMAIL_KEY, email)
+                            .putString(PASSWORD_KEY, password)
                             .apply()
                     startMainActivity()
                 }, {

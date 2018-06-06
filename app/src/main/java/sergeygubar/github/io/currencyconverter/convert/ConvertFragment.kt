@@ -1,5 +1,6 @@
 package sergeygubar.github.io.currencyconverter.convert
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,8 +10,10 @@ import kotlinx.android.synthetic.main.fragment_convert.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import sergeygubar.github.io.currencyconverter.R
-import sergeygubar.github.io.currencyconverter.db.AssetsDataBase
 import sergeygubar.github.io.currencyconverter.entities.Asset
+import android.net.ConnectivityManager
+import org.jetbrains.anko.support.v4.toast
+
 
 class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
 
@@ -30,6 +33,10 @@ class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         convert_button.setOnClickListener {
+            if (!isOnline()) {
+                presenter = ConvertFragmentPresenter(context!!, this, OfflineAssetRepository(context!!))
+                toast("Internet is currently unavailable. Loading db data")
+            }
             presenter.convertCurrency(
                     assetsIds[currency_from_spinner.selectedIndex],
                     value_edit_text.text.toString().toInt(),
@@ -40,7 +47,8 @@ class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = ConvertFragmentPresenter(context!!, this, OfflineAssetRepository(context!!))
+
+        presenter = ConvertFragmentPresenter(context!!, this, OnlineAssetRepository(context!!))
         presenter.loadAssets()
     }
 
@@ -58,4 +66,9 @@ class ConvertFragment : Fragment(), AnkoLogger, ConvertFragmentView {
         result_text_view.text = result
     }
 
+    private fun isOnline(): Boolean {
+        val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
 }
